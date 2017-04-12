@@ -10,6 +10,14 @@ import UIKit
 
 class CategoryCell: UICollectionViewCell, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
+    var category: Categories? {
+        didSet {
+            if let name = category?.categoryName {
+                categoryLabel.text = name
+            }
+        }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -75,11 +83,18 @@ class CategoryCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 4
+        if let apps = category?.apps {
+            return apps.count
+        }
+        return 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: appCellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: appCellId, for: indexPath) as! AppCell
+        if let apps = category?.apps {
+                cell.app = apps[indexPath.item]
+        }
+        
         return cell
     }
     
@@ -90,6 +105,27 @@ class CategoryCell: UICollectionViewCell, UICollectionViewDelegate, UICollection
 }
 
 class AppCell: UICollectionViewCell {
+    
+    var app: App? {
+        didSet {
+            
+            if let name = app?.name {
+                    nameLabel.text = name
+            }
+            if let price = app?.price {
+                    priceLabel.text = price
+            }
+            
+            if let category = app?.category {
+                categoryLabel.text = category
+            }
+            if let imageName = app?.image {
+                let image = UIImage(named: imageName)
+                imageView.image = image
+            }
+            
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -11,20 +11,23 @@ import UIKit
 class FeatureViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     let cellId = "cellId"
+    var categories = [Categories]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         collectionView?.backgroundColor = UIColor.white
         collectionView?.register(CategoryCell.self, forCellWithReuseIdentifier: cellId)
-        
+        categories = Categories.sampleData()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 3
+        return categories.count
     }
     
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellId, for: indexPath) as! CategoryCell
+        let category = categories[indexPath.item]
+        cell.category = category
         
         return cell
     }
